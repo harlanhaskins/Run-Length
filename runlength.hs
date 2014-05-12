@@ -7,22 +7,22 @@ expressSingle x = ns !! fromInteger x
                               "four", "five", "six", "seven",
                               "eight", "nine"]
 
-seensayList :: [Integer] -> [Integer]
-seensayList xs = [toInteger (length xs), (xs !! 0)]
+runlengthList :: [Integer] -> [Integer]
+runlengthList xs = [toInteger (length xs), (xs !! 0)]
 
 tokenize :: Integer -> [[Integer]]
 tokenize = group . (digits 10)
 
-seensay :: Integer -> Integer
-seensay = (unDigits 10) . concat . mapSeensay
-           where mapSeensay x = map seensayList $ tokenize x
+runlength :: Integer -> Integer
+runlength = (unDigits 10) . concat . maprunlength
+           where maprunlength x = map runlengthList $ tokenize x
 
-seensayLevel :: Integer -> Integer -> Integer
-seensayLevel 0 x = x
-seensayLevel d x = seensayLevel (d - 1) $ seensay x
+runlengthLevel :: Integer -> Integer -> Integer
+runlengthLevel 0 x = x
+runlengthLevel d x = runlengthLevel (d - 1) $ runlength x
 
 expressLevel :: Integer -> Integer -> [Char]
-expressLevel d x = express $ seensayLevel d x
+expressLevel d x = express $ runlengthLevel d x
 
 pairs :: [Integer] -> [(Integer, Integer)]
 pairs []        = []
@@ -30,7 +30,7 @@ pairs (x:[])    = [(x,0)]
 pairs (x:x':xs) = (x,x') : pairs xs
 
 express :: Integer -> [Char]
-express x = intercalate " " $ map expressGroup (pairs $ (digits 10) $ seensay x)
+express x = intercalate " " $ map expressGroup (pairs $ (digits 10) $ runlength x)
 
 expressGroup :: (Integer, Integer) -> String
 expressGroup xs | (fst xs == 1) = f ++ "."
