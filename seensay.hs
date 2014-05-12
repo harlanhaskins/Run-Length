@@ -35,4 +35,6 @@ express x = intercalate " " $ map expressGroup (pairs $ (digits 10) $ seensay x)
 expressGroup :: (Integer, Integer) -> String
 expressGroup xs | (fst xs == 1) = f ++ "."
                 | otherwise     = f ++ "s."
-                where f = expressSingle (fst xs) ++ " " ++ expressSingle (snd xs)
+                where f =  expressSingle (fst xs)
+                        ++ " "
+                        ++ expressSingle (snd xs)
