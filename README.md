@@ -1,4 +1,4 @@
-# See N Say
+# Run Length
 
 An implementation of run-length encoding in Haskell.
 
