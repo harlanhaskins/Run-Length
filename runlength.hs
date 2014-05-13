@@ -1,5 +1,6 @@
 import Data.Digits
 import Data.List
+import System.Environment
 
 -- Actual run-length encoding.
 
@@ -16,6 +17,7 @@ runlengthChar :: Char -> [(Int, Char)]
 runlengthChar c = runlength (c:[])
 
 -- Expression (turning run-length encoded Integers into Strings)
+
 expressSingle :: Int -> String
 expressSingle x | x < 10    = ns !! x
                 | otherwise = show x
@@ -34,16 +36,18 @@ expressGroup (count, noun) | count == 1 = phrase ++ "."
 expressList :: (Show a, Eq a) => [(Int, a)] -> [String]
 expressList = map expressGroup
 
-express :: (Show a, Eq a) => (a -> [(Int, a)]) -> a -> String
-express f x = unwords $ expressList xs
-              where xs = f x
+express :: (Show a, Eq a) => [(Int, a)] -> String
+express xs = unwords $ expressList xs
 
 expressInt :: Integer -> String
-expressInt = express runlengthInt
+expressInt = express . runlengthInt
 
 expressChar :: Char -> String
-expressChar = express runlengthChar
+expressChar = express . runlengthChar
 
 -- Kludgey, but works. Wishing I could re-use express more explicitly.
 expressString :: String -> String
-expressString s = unwords $ map expressChar s
+expressString = express . runlength
+
+main :: IO ()
+main = getArgs >>= print . expressString . head
