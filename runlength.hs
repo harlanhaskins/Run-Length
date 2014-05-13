@@ -15,7 +15,9 @@ runlengthInt = runlength . (digits 10)
 runlengthChar :: Char -> [(Int, Char)]
 runlengthChar c = runlength (c:[])
 
--- Expression (turning run-length encoded Integers into Strings)
+-- Expression (turning run-length encoded input into 
+-- human-readable Strings)
+
 expressSingle :: Int -> String
 expressSingle x | x < 10    = ns !! x
                 | otherwise = show x
