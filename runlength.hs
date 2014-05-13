@@ -1,6 +1,5 @@
 import Data.Digits
 import Data.List
-import System.Environment
 
 -- Actual run-length encoding.
 
