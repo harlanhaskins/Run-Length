@@ -13,9 +13,6 @@ runlength x = map runlengthList $ group x
 runlengthInt :: (Integral a) => a -> [(Int, a)]
 runlengthInt = runlength . (digits 10)
 
-runlengthChar :: Char -> [(Int, Char)]
-runlengthChar c = runlength (c:[])
-
 -- Expression (turning run-length encoded input into human-readable Strings)
 
 expressSingle :: Int -> String
@@ -42,9 +39,6 @@ express xs = unwords $ expressList xs
 
 expressInt :: Integer -> String
 expressInt = express . runlengthInt
-
-expressChar :: Char -> String
-expressChar = express . runlengthChar
 
 expressString :: String -> String
 expressString = express . runlength
