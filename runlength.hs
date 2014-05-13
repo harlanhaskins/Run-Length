@@ -20,9 +20,8 @@ expressSingle x
         | x < 10    = ns !! x
         | otherwise = show x
     where
-        ns = ["zero", "one", "two", "three",
-              "four", "five", "six", "seven",
-              "eight", "nine"]
+        ns = ["zero", "one", "two", "three", "four", 
+              "five", "six", "seven", "eight", "nine"]
 
 expressGroup :: (Show a, Eq a) => (Int, a) -> String
 expressGroup (count, noun) 
