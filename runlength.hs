@@ -24,11 +24,12 @@ expressSingle x | x < 10    = ns !! x
                             "eight", "nine"]
 
 expressGroup :: (Show a, Eq a) => (Int, a) -> String
-expressGroup xs | (fst xs == 1) = phrase ++ "."
-                | otherwise     = phrase ++ "s."
-                where phrase    = expressSingle (fst xs)
-                               ++ " "
-                               ++ show (snd xs)
+expressGroup (count, noun) | count == 1 = phrase ++ "."
+                           | otherwise  = phrase ++ "s."
+                       where
+                            phrase = expressSingle count
+                                  ++ " "
+                                  ++ show noun
 
 expressList :: (Show a, Eq a) => [(Int, a)] -> [String]
 expressList = map expressGroup
