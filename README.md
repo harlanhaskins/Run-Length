@@ -2,7 +2,7 @@
 
 An implementation of run-length encoding in Haskell.
 
-`runlength` will [run-length encode] a list. This is useful for lossless compression algorithms.
+`runlength` will [run-length encode](http://en.wikipedia.org/wiki/Run-length_encoding) a list. This is useful for lossless compression algorithms.
 
 `express` will turn run-length encoded input into human readable text.
 
