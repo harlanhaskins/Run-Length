@@ -46,7 +46,6 @@ expressInt = express . runlengthInt
 expressChar :: Char -> String
 expressChar = express . runlengthChar
 
--- Kludgey, but works. Wishing I could re-use express more explicitly.
 expressString :: String -> String
 expressString = express . runlength
 
