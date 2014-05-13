@@ -19,19 +19,20 @@ runlengthChar c = runlength (c:[])
 -- Expression (turning run-length encoded input into human-readable Strings)
 
 expressSingle :: Int -> String
-expressSingle x | x < 10    = ns !! x
-                | otherwise = show x
-                where ns = ["zero", "one", "two", "three",
-                            "four", "five", "six", "seven",
-                            "eight", "nine"]
+expressSingle x 
+        | x < 10    = ns !! x
+        | otherwise = show x
+    where
+        ns = ["zero", "one", "two", "three",
+              "four", "five", "six", "seven",
+              "eight", "nine"]
 
 expressGroup :: (Show a, Eq a) => (Int, a) -> String
-expressGroup (count, noun) | count == 1 = phrase ++ "."
-                           | otherwise  = phrase ++ "s."
-                       where
-                            phrase = expressSingle count
-                                  ++ " "
-                                  ++ show noun
+expressGroup (count, noun) 
+        | count == 1 = phrase ++ "."
+        | otherwise  = phrase ++ "s."
+    where
+        phrase = expressSingle count ++ " " ++ show noun
 
 expressList :: (Show a, Eq a) => [(Int, a)] -> [String]
 expressList = map expressGroup
