@@ -3,42 +3,38 @@ import Data.List
 
 -- Actual run-length encoding.
 
-tokenize :: Integer -> [[Integer]]
-tokenize = group . (digits 10)
+runlengthList :: Eq a => [a] -> (Int,a)
+runlengthList xs = (length xs, head xs)
 
-runlengthList :: [Integer] -> [Integer]
-runlengthList xs = [toInteger (length xs), (xs !! 0)]
+runlength :: Eq a => [a] -> [(Int, a)]
+runlength x = map runlengthList $ group x
 
-runlength :: Integer -> Integer
-runlength = (unDigits 10) . concat . maprunlength
-           where maprunlength x = map runlengthList $ tokenize x
-
-runlengthLevel :: Integer -> Integer -> Integer
-runlengthLevel 0 x = x
-runlengthLevel d x = runlengthLevel (d - 1) $ runlength x
+runlengthInt :: (Integral a) => a -> [(Int, a)]
+runlengthInt = runlength . (digits 10)
 
 -- Expression (turning run-length encoded Integers into Strings)
-
-pairs :: [Integer] -> [(Integer, Integer)]
-pairs []        = []
-pairs (x:[])    = [(x,0)]
-pairs (x:x':xs) = (x,x') : pairs xs
-
-expressSingle :: Integer -> [Char]
-expressSingle x = ns !! fromInteger x
+expressSingle :: Int -> String
+expressSingle x = ns !! x
                   where ns = ["zero", "one", "two", "three",
                               "four", "five", "six", "seven",
                               "eight", "nine"]
 
-expressGroup :: (Integer, Integer) -> String
-expressGroup xs | (fst xs == 1) = f ++ "."
-                | otherwise     = f ++ "s."
-                where f =  expressSingle (fst xs)
-                        ++ " "
-                        ++ expressSingle (snd xs)
+expressGroup :: (Show a, Eq a) => (Int, a) -> String
+expressGroup xs | (fst xs == 1) = phrase ++ "."
+                | otherwise     = phrase ++ "s."
+                where phrase = expressSingle (fst xs)
+                               ++ " "
+                               ++ show (snd xs)
 
-express :: Integer -> [Char]
-express x = intercalate " " $ map expressGroup (pairs $ (digits 10) $ runlength x)
+expressList :: (Show a, Eq a) => [(Int, a)] -> [String]
+expressList = map expressGroup
 
-expressLevel :: Integer -> Integer -> [Char]
-expressLevel d x = express $ runlengthLevel d x
+express :: (Show a, Eq a) => (a -> [(Int, a)]) -> a -> String
+express f x = unwords $ expressList xs
+              where xs = f x
+
+expressInt :: Integer -> String
+expressInt = express runlengthInt
+
+-- expressString :: String -> String
+-- expressString = express runlength
