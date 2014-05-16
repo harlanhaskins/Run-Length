@@ -7,7 +7,8 @@ runlengthList :: Eq a => [a] -> (Int,a)
 runlengthList xs = (length xs, head xs)
 
 runlength :: Eq a => [a] -> [(Int, a)]
-runlength x = map runlengthList $ group x
+runlength = f . group
+    where   f = map runlengthList
 
 runlengthInt :: (Integral a) => a -> [(Int, a)]
 runlengthInt = runlength . (digits 10)
@@ -15,15 +16,15 @@ runlengthInt = runlength . (digits 10)
 -- Expression (turning run-length encoded input into human-readable Strings)
 
 expressSingle :: Int -> String
-expressSingle x 
+expressSingle x
         | x < 10    = ns !! x
         | otherwise = show x
     where
-        ns = ["zero", "one", "two", "three", "four", 
+        ns = ["zero", "one", "two", "three", "four",
               "five", "six", "seven", "eight", "nine"]
 
 expressGroup :: (Show a, Eq a) => (Int, a) -> String
-expressGroup (count, noun) 
+expressGroup (count, noun)
         | count == 1 = phrase ++ "."
         | otherwise  = phrase ++ "s."
     where
@@ -33,7 +34,7 @@ expressList :: (Show a, Eq a) => [(Int, a)] -> [String]
 expressList = map expressGroup
 
 express :: (Show a, Eq a) => [(Int, a)] -> String
-express xs = unwords $ expressList xs
+express = unwords . expressList
 
 expressInt :: Integer -> String
 expressInt = express . runlengthInt
