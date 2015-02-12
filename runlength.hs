@@ -1,5 +1,6 @@
 import Data.Digits
 import Data.List
+import System.Environment
 
 -- Actual run-length encoding.
 
@@ -11,7 +12,7 @@ runlength = f . group
     where   f = map runlengthList
 
 runlengthInt :: (Integral a) => a -> [(Int, a)]
-runlengthInt = runlength . (digits 10)
+runlengthInt = runlength . digits 10
 
 -- Expression (turning run-length encoded input into human-readable Strings)
 
@@ -41,3 +42,7 @@ expressInt = express . runlengthInt
 
 expressString :: String -> String
 expressString = express . runlength
+
+main :: IO ()
+main = getArgs >>= print . runlength . head
+
