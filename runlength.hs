@@ -2,6 +2,12 @@ import Data.Digits
 import Data.List
 import System.Environment
 
+class Split a where
+    split :: a -> [a]
+
+instance Split Integer where
+    split = digits 10
+
 -- Actual run-length encoding.
 
 runlengthList :: Eq a => [a] -> (Int,a)
@@ -11,8 +17,8 @@ runlength :: Eq a => [a] -> [(Int, a)]
 runlength = f . group
     where   f = map runlengthList
 
-runlengthInt :: (Integral a) => a -> [(Int, a)]
-runlengthInt = runlength . digits 10
+runlengthSplit :: (Split a, Eq a) => a -> [(Int, a)]
+runlengthSplit = runlength . split
 
 -- Expression (turning run-length encoded input into human-readable Strings)
 
@@ -31,17 +37,14 @@ expressGroup (count, noun)
     where
         phrase = expressSingle count ++ " " ++ show noun
 
-expressList :: (Show a, Eq a) => [(Int, a)] -> [String]
-expressList = map expressGroup
+expressList :: (Show a, Eq a) => [a] -> [String]
+expressList = map expressGroup . runlength
 
-express :: (Show a, Eq a) => [(Int, a)] -> String
+express :: (Show a, Eq a) => [a] -> String
 express = unwords . expressList
 
-expressInt :: Integer -> String
-expressInt = express . runlengthInt
-
-expressString :: String -> String
-expressString = express . runlength
+expressSplit :: (Split a, Show a, Eq a) => a -> String
+expressSplit = express . split
 
 main :: IO ()
 main = getArgs >>= print . runlength . head
